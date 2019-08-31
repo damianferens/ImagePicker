@@ -23,21 +23,30 @@ class GalleryInteractor: NSObject, GalleryBusinessLogic, GalleryDataStore {
 	var presenter: GalleryPresentationLogic?
 	private let worker = GalleryWorker()
     var pickedImage: UIImage?
-    private lazy var imagePicker: UIImagePickerController = {
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.allowsEditing = false
-        picker.sourceType = .photoLibrary
-        picker.mediaTypes = ["public.image"]
-        picker.modalPresentationStyle = .popover
-        return picker
-    }()
-	
+    private var imagePicker = UIImagePickerController()
+    
+    // MARK: - Initialization
+    
+    override init() {
+        super.init()
+        configurePicker()
+    }
+    
 	// MARK: - Business Logic
     
     func pickImage() {
         let response = Gallery.ImagePicker.Response(picker: imagePicker)
         presenter?.presentImagePicker(response: response)
+    }
+    
+    // MARK: - Private methods
+    
+    private func configurePicker() {
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.mediaTypes = ["public.image"]
+        imagePicker.modalPresentationStyle = .popover
     }
 	
 }
